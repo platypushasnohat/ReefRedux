@@ -37,7 +37,11 @@ public class CoralPatchFeature extends Feature<NoneFeatureConfiguration> {
         Optional<Block> corals = BuiltInRegistries.BLOCK.getTag(BlockTags.CORAL_PLANTS).flatMap((holders) -> holders.getRandomElement(worldGenLevel.getRandom())).map(Holder::value);
 
         if (worldGenLevel.getFluidState(heightmapPos).is(FluidTags.WATER)) {
-            BlockState block = corals.map(Block::defaultBlockState).orElseGet(Blocks.HORN_CORAL::defaultBlockState).setValue(CoralPlantBlock.WATERLOGGED, true);
+            BlockState block = corals.map(Block::defaultBlockState).orElseGet(Blocks.HORN_CORAL::defaultBlockState);
+
+            if (block.hasProperty(CoralPlantBlock.WATERLOGGED)) {
+                block.setValue(CoralPlantBlock.WATERLOGGED, true);
+            }
 
             worldGenLevel.setBlock(blockPos, block, 3);
 
